@@ -48,9 +48,9 @@
     <Analyzer Include="D:\Programas\Unity\6000.2.8f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\Materials\water\waterMovement.cs" />
-    <Compile Include="Assets\Scripts\SunLightSim.cs" />
+    <Compile Include="Assets\Mapa Global\Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Mapa Global\Scripts\SunLightSim.cs" />
+    <Compile Include="Assets\Mapa Global\Materials\water\waterMovement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
