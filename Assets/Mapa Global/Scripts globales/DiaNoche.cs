@@ -3,41 +3,108 @@ using UnityEngine;
 public class SunLightSim : MonoBehaviour
 {
     public Light sunLight;
-    public float rotationSpeed = 1f;
-    public float dayIntensity = 2f;
-    public bool isDayTime = true;
+    public float hourOfDay = 12f;   // 0 a 24
+    public float velocidadDIa = 0.1f;
 
-    public Gradient lightColor; // amanecer, día, atardecer, noche
-    public AnimationCurve lightIntensity; // 0 (noche) a 1 (día)
+    public Gradient lightColor;
+    public AnimationCurve lightIntensity;
+    public AnimationCurve ambientMultiplier;
 
-    public float timeOfDay = 0f; // 0 a 1 representa el ciclo completo
+    public Color ambientBaseColor = Color.white;
+    public float ambientBaseMultiplier = 1f;
 
-    void Start() {
-        if (sunLight == null) {
+    public float time01 = 0f;
+    float dayIntensity = 2f;
+
+    // --- NUEVO: skybox ---
+    public Material skyboxMaterial;
+    public Gradient skyTintGradient;
+    public AnimationCurve skyExposureCurve;
+
+    string exposureProperty = null;
+
+    void Start()
+    {
+        // detectar sunLight
+        if (sunLight == null)
+        {
             sunLight = GetComponent<Light>();
-            if (sunLight == null || sunLight.type != LightType.Directional) {
+            if (sunLight == null || sunLight.type != LightType.Directional)
                 sunLight = FindObjectOfType<Light>();
+        }
+
+        // asignar skybox si existe
+        if (skyboxMaterial != null)
+        {
+            RenderSettings.skybox = skyboxMaterial;
+            DetectSkyboxExposureProperty();
+        }
+    }
+
+    void Update()
+    {
+        // avanzar hora
+        hourOfDay += Time.deltaTime * velocidadDIa;
+        if (hourOfDay >= 24f) hourOfDay = 0f;
+
+        // 0-1
+        time01 = Mathf.Clamp01(hourOfDay / 24f);
+
+        // ángulo del sol
+        float angle = time01 * 360f - 90f;
+        transform.rotation = Quaternion.Euler(angle, 170f, 0f);
+
+        // luz del sol
+        float sInt = lightIntensity.Evaluate(time01) * dayIntensity;
+        sunLight.color = lightColor.Evaluate(time01);
+        sunLight.intensity = sInt;
+        sunLight.enabled = angle >= 0f && angle <= 180f;
+
+        // luz ambiental
+        float amb = ambientMultiplier.Evaluate(time01) * ambientBaseMultiplier;
+        RenderSettings.ambientLight = ambientBaseColor * amb;
+        RenderSettings.ambientIntensity = amb;
+        DynamicGI.UpdateEnvironment();
+
+        // --- ACTUALIZAR SKYBOX ---
+        if (skyboxMaterial != null)
+        {
+            // tinte del skybox panorámico
+            if (skyTintGradient != null && skyboxMaterial.HasProperty("_Tint"))
+            {
+                Color tint = skyTintGradient.Evaluate(time01);
+                skyboxMaterial.SetColor("_Tint", tint);
+            }
+
+            // exposición del skybox panorámico
+            if (skyExposureCurve != null && exposureProperty != null)
+            {
+                float exp = skyExposureCurve.Evaluate(time01);
+                skyboxMaterial.SetFloat(exposureProperty, exp);
             }
         }
     }
 
-    void Update() {
-        // Avanza el tiempo del día
-        timeOfDay += Time.deltaTime * rotationSpeed * 0.01f;
-        if (timeOfDay > 1f) timeOfDay = 0f;
+    // Detectar qué propiedad usa el shader Panoramic
+    void DetectSkyboxExposureProperty()
+    {
+        if (skyboxMaterial == null) return;
 
-        // Calcular ángulo solar
-        float angle = timeOfDay * 360f - 90f;
-        transform.rotation = Quaternion.Euler(angle, 170f, 0f);
+        string[] props =
+        {
+            "_Exposure",
+            "_ExposureBias",
+            "_ExposureScale",
+            "_ExposureCompensation"
+        };
 
-        // Actualizar color e intensidad
-        float intensity = lightIntensity.Evaluate(timeOfDay) * dayIntensity;
-        sunLight.color = lightColor.Evaluate(timeOfDay);
-        sunLight.intensity = intensity;
-
-        // Actualizar estado de día
-        isDayTime = angle >= 0f && angle <= 180f;
+        foreach (string p in props)
+        {
+            if (skyboxMaterial.HasProperty(p))
+            {
+                exposureProperty = p;
+                break;
+            }
+        }
     }
-
-
 }
