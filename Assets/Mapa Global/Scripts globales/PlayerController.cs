@@ -6,10 +6,10 @@ public class PlayerController : MonoBehaviour
     public Transform cameraTransform;
     public float mouseSensitivity = 2f;
 
-    public bool doorAvailable = false; // Para mostrar en la UI
-
     private Rigidbody rb;
     private float xRotation = 0f;
+
+    private IInteractuable currentInteractable;
 
     void Start()
     {
@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     {
         HandleMouseLook();
         HandleMovement();
+        HandleInteraction();
     }
 
     void HandleMovement()
@@ -43,5 +44,30 @@ public class PlayerController : MonoBehaviour
 
         cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
+    }
+
+    void HandleInteraction()
+    {
+        if (currentInteractable != null && Input.GetKeyDown(KeyCode.E))
+        {
+            currentInteractable.Interaccion();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Trigger"))
+        {
+            currentInteractable = other.GetComponent<IInteractuable>();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Trigger"))
+        {
+            if (currentInteractable != null)
+                currentInteractable = null;
+        }
     }
 }

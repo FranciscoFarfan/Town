@@ -2,58 +2,47 @@ using UnityEngine;
 
 public class DoorTrigger : MonoBehaviour
 {
-    public Transform indoor;
-    public Transform outdoor;
-    public KeyCode interactKey = KeyCode.E;
+    public Transform indoorPoint;
+    public Transform outdoorPoint;
 
-    private Transform currentTrigger;
-    private PlayerController playerController;
+    private bool playerIsIndoor = false;
+    private bool playerIsOutdoor = false;
+
+    private Transform player;
 
     void Start()
     {
-        if (indoor == null) indoor = transform.Find("Indoor");
-        if (outdoor == null) outdoor = transform.Find("Outdoor");
+        player = GameObject.FindWithTag("Player").transform;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Interaccion()
     {
-        if (other.CompareTag("Player"))
+        if (playerIsIndoor)
         {
-            playerController = other.GetComponent<PlayerController>();
-            if (playerController != null)
-            {
-                playerController.doorAvailable = true; // 🔔 Activa UI
-            }
-
-            // Detecta cuál trigger tocó
-            if (other.transform.position == indoor.position)
-                currentTrigger = indoor;
-            else
-                currentTrigger = outdoor;
+            Teleport(outdoorPoint);
+        }
+        else if (playerIsOutdoor)
+        {
+            Teleport(indoorPoint);
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void Teleport(Transform destination)
     {
-        if (other.CompareTag("Player") && playerController != null)
-        {
-            playerController.doorAvailable = false; // 🔕 Desactiva UI
-            currentTrigger = null;
-            playerController = null;
-        }
+        Vector3 newPos = destination.position;
+        newPos.y += 0.1f; 
+
+        player.position = newPos;
     }
 
-    void Update()
+    // Estos métodos serán llamados por los triggers hijos
+    public void SetIndoor(bool state)
     {
-        if (playerController != null && currentTrigger != null)
-        {
-            if (Input.GetKeyDown(interactKey))
-            {
-                if (currentTrigger == indoor)
-                    playerController.transform.position = outdoor.position;
-                else
-                    playerController.transform.position = indoor.position;
-            }
-        }
+        playerIsIndoor = state;
+    }
+
+    public void SetOutdoor(bool state)
+    {
+        playerIsOutdoor = state;
     }
 }

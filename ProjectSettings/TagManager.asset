@@ -10,6 +10,7 @@ TagManager:
   - Water
   - Beed
   - HourlyDoor
+  - Trigger
   layers:
   - Default
   - TransparentFX
