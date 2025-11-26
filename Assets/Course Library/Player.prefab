@@ -268,7 +268,7 @@ MonoBehaviour:
   walkSpeed: 5
   cameraTransform: {fileID: 1050447065677383591}
   mouseSensitivity: 2
-  jumpForce: 2.5
+  jumpForce: 2.9
   inventario: []
   dinero: 0
   reputacion: 0

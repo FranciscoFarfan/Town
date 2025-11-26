@@ -74,6 +74,7 @@
     <Compile Include="Assets\Course Library\Animals\Farm\AnimalBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Import\Furniture\license.txt" />
     <None Include="Assets\Sketchfab For Unity\Dependencies\Shaders\GLTFFlipTexture.shader" />
     <None Include="Assets\Sketchfab For Unity\Dependencies\Shaders\GLTFColorSpace.cginc" />
     <None Include="Assets\Course Library\Fonts\Margarine\OFL.txt" />
@@ -88,6 +89,7 @@
     <None Include="Assets\Sketchfab For Unity\Dependencies\Libraries\Newtonsoft.Json.dll" />
     <None Include="Assets\Course Library\Fonts\Indie_Flower\OFL.txt" />
     <None Include="Assets\Sketchfab For Unity\Dependencies\Libraries\SketchfabPlugin.dll" />
+    <None Include="Assets\Import\IS4\Additional.txt" />
     <None Include="Assets\Course Library\Fonts\Exo_2\OFL.txt" />
     <None Include="Assets\Course Library\_Source_Files\_LICENSE.txt" />
     <None Include="Assets\Sketchfab For Unity\Dependencies\Libraries\Ionic.Zip.Unity.dll" />
