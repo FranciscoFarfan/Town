@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private float xRotation = 0f;
 
+    public float jumpForce = 5f;
+    private bool isGrounded = true;
+
     private IInteractuable currentInteractable;
 
     void Start()
@@ -21,6 +24,7 @@ public class PlayerController : MonoBehaviour
     {
         HandleMouseLook();
         HandleMovement();
+        HandleJump();
         HandleInteraction();
     }
 
@@ -54,6 +58,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void HandleJump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Trigger"))
@@ -68,6 +81,14 @@ public class PlayerController : MonoBehaviour
         {
             if (currentInteractable != null)
                 currentInteractable = null;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Ground"))
+        {
+            isGrounded = true;
         }
     }
 }
