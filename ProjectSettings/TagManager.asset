@@ -6,11 +6,9 @@ TagManager:
   tags:
   - Ground
   - Vegetation
-  - Door
   - Water
-  - Beed
-  - HourlyDoor
   - Trigger
+  - Item
   layers:
   - Default
   - TransparentFX

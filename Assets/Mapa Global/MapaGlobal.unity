@@ -131,8 +131,9 @@ GameObject:
   - component: {fileID: 410087040}
   - component: {fileID: 410087042}
   - component: {fileID: 410087043}
+  - component: {fileID: 410087044}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260,8 +261,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SunLightSim
   sunLight: {fileID: 0}
-  hourOfDay: 5
-  velocidadDIa: 0.001
   lightColor:
     serializedVersion: 2
     key0: {r: 1, g: 0.93994427, b: 0.75, a: 1}
@@ -396,7 +395,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   ambientBaseColor: {r: 1, g: 1, b: 1, a: 1}
   ambientBaseMultiplier: 1
-  time01: 0
   skyboxMaterial: {fileID: 2100000, guid: 2f189d425a6be0046a84edc3ed2626b9, type: 2}
   skyTintGradient:
     serializedVersion: 2
@@ -479,6 +477,70 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &410087044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410087039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3e39fd2cf5976c4ab2ab3e675a96f3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  hora: 8
+  dia: 1
+  velocidadTiempo: 1
+  baseDeDatos:
+  - nombre: Platano
+    precio: 20
+    rareza: 1
+    prefab: {fileID: 1180137445707430, guid: 84cd279dfc9ea0a4b8564030182915fa, type: 3}
+  - nombre: Galleta
+    precio: 12
+    rareza: 1
+    prefab: {fileID: 100000, guid: 10d25933610222845ad3760a855829c4, type: 3}
+  - nombre: Pescado
+    precio: 30
+    rareza: 2
+    prefab: {fileID: 160006, guid: 245ebd2bf811d4f45a1d5dcd8c327131, type: 3}
+  - nombre: ManzanaVerde
+    precio: 5
+    rareza: 1
+    prefab: {fileID: 101770, guid: c13306d1f1d9a1a489199ef77f9dba89, type: 3}
+  - nombre: ManzanaRoja
+    precio: 20
+    rareza: 2
+    prefab: {fileID: 126446, guid: c2f4b43f266dc11439efef86830dafb4, type: 3}
+  - nombre: Pera
+    precio: 40
+    rareza: 3
+    prefab: {fileID: 120208, guid: 4949a22a2c444b0459d7289aae77be28, type: 3}
+  - nombre: BarrilAceite
+    precio: 200
+    rareza: 2
+    prefab: {fileID: 151586, guid: 95927758d3a4cef4ba6c4318f06876fd, type: 3}
+  - nombre: VinoBarato
+    precio: 250
+    rareza: 1
+    prefab: {fileID: 151586, guid: 95927758d3a4cef4ba6c4318f06876fd, type: 3}
+  - nombre: VinoCaro
+    precio: 600
+    rareza: 3
+    prefab: {fileID: 1547116696582102, guid: 2038922a54954c1488db3f646dea1d4b, type: 3}
+  - nombre: Paquete
+    precio: 200
+    rareza: 1
+    prefab: {fileID: 134104, guid: 71782582b9d2cac4cba5251a3b767d13, type: 3}
+  - nombre: Bomba
+    precio: 150
+    rareza: 3
+    prefab: {fileID: 1902926406981984, guid: 666ff701b211d6440b7bd44aa7b3abfa, type: 3}
+  - nombre: Carrete
+    precio: 100
+    rareza: 1
+    prefab: {fileID: 114304, guid: 3daef342e8f3f9548b04424eac7d4d0d, type: 3}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

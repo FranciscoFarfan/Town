@@ -3,9 +3,6 @@ using UnityEngine;
 public class SunLightSim : MonoBehaviour
 {
     public Light sunLight;
-    public float hourOfDay = 12f;   // 0 a 24
-    public float velocidadDIa = 0.1f;
-
     public Gradient lightColor;
     public AnimationCurve lightIntensity;
     public AnimationCurve ambientMultiplier;
@@ -13,19 +10,15 @@ public class SunLightSim : MonoBehaviour
     public Color ambientBaseColor = Color.white;
     public float ambientBaseMultiplier = 1f;
 
-    public float time01 = 0f;
-    float dayIntensity = 2f;
-
-    // --- NUEVO: skybox ---
     public Material skyboxMaterial;
     public Gradient skyTintGradient;
     public AnimationCurve skyExposureCurve;
 
     string exposureProperty = null;
+    float dayIntensity = 2f;
 
     void Start()
     {
-        // detectar sunLight
         if (sunLight == null)
         {
             sunLight = GetComponent<Light>();
@@ -33,7 +26,6 @@ public class SunLightSim : MonoBehaviour
                 sunLight = FindObjectOfType<Light>();
         }
 
-        // asignar skybox si existe
         if (skyboxMaterial != null)
         {
             RenderSettings.skybox = skyboxMaterial;
@@ -43,12 +35,11 @@ public class SunLightSim : MonoBehaviour
 
     void Update()
     {
-        // avanzar hora
-        hourOfDay += Time.deltaTime * velocidadDIa;
-        if (hourOfDay >= 24f) hourOfDay = 0f;
+        // 🔹 Leer hora desde GameManager
+        float hourOfDay = GameManager.Instance.hora;
 
-        // 0-1
-        time01 = Mathf.Clamp01(hourOfDay / 24f);
+        // convertir a 0-1
+        float time01 = Mathf.Clamp01(hourOfDay / 24f);
 
         // ángulo del sol
         float angle = time01 * 360f - 90f;
@@ -66,17 +57,15 @@ public class SunLightSim : MonoBehaviour
         RenderSettings.ambientIntensity = amb;
         DynamicGI.UpdateEnvironment();
 
-        // --- ACTUALIZAR SKYBOX ---
+        // skybox
         if (skyboxMaterial != null)
         {
-            // tinte del skybox panorámico
             if (skyTintGradient != null && skyboxMaterial.HasProperty("_Tint"))
             {
                 Color tint = skyTintGradient.Evaluate(time01);
                 skyboxMaterial.SetColor("_Tint", tint);
             }
 
-            // exposición del skybox panorámico
             if (skyExposureCurve != null && exposureProperty != null)
             {
                 float exp = skyExposureCurve.Evaluate(time01);
@@ -85,19 +74,11 @@ public class SunLightSim : MonoBehaviour
         }
     }
 
-    // Detectar qué propiedad usa el shader Panoramic
     void DetectSkyboxExposureProperty()
     {
         if (skyboxMaterial == null) return;
 
-        string[] props =
-        {
-            "_Exposure",
-            "_ExposureBias",
-            "_ExposureScale",
-            "_ExposureCompensation"
-        };
-
+        string[] props = { "_Exposure", "_ExposureBias", "_ExposureScale", "_ExposureCompensation" };
         foreach (string p in props)
         {
             if (skyboxMaterial.HasProperty(p))

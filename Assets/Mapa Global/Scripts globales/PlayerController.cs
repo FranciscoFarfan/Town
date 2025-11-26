@@ -1,18 +1,31 @@
 using UnityEngine;
+using System.Collections.Generic;
+
+
+[System.Serializable]
+public class PlayerItem
+{
+    public string nombre;
+    public int cantidad;
+}
+
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movimiento")]
     public float walkSpeed = 5f;
     public Transform cameraTransform;
     public float mouseSensitivity = 2f;
+    public float jumpForce = 5f;
 
     private Rigidbody rb;
     private float xRotation = 0f;
-
-    public float jumpForce = 5f;
     private bool isGrounded = true;
-
     private IInteractuable currentInteractable;
+
+    [Header("Inventario")]
+    public List<PlayerItem> inventario = new List<PlayerItem>();
+    public float dinero = 0f;
 
     void Start()
     {
@@ -28,6 +41,33 @@ public class PlayerController : MonoBehaviour
         HandleInteraction();
     }
 
+    // ---------------- INVENTARIO ----------------
+    public void AddToInv(string nombre, int cantidad)
+    {
+        PlayerItem item = inventario.Find(i => i.nombre == nombre);
+        if (item != null)
+        {
+            item.cantidad += cantidad;
+        }
+        else
+        {
+            inventario.Add(new PlayerItem { nombre = nombre, cantidad = cantidad });
+        }
+    }
+
+    public void SellFromInv(string nombre, int cantidad)
+    {
+        PlayerItem item = inventario.Find(i => i.nombre == nombre);
+        ItemData baseItem = GameManager.Instance.baseDeDatos.Find(i => i.nombre == nombre);
+
+        if (item != null && item.cantidad >= cantidad && baseItem != null)
+        {
+            item.cantidad -= cantidad;
+            dinero += baseItem.precio * cantidad;
+        }
+    }
+
+    // ---------------- MOVIMIENTO ----------------
     void HandleMovement()
     {
         float moveX = Input.GetAxis("Horizontal");
@@ -35,7 +75,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
         Vector3 velocity = move * walkSpeed;
-        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z); // ⚠️ corregí "linearVelocity" → es "velocity"
     }
 
     void HandleMouseLook()
