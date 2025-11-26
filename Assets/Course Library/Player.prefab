@@ -266,13 +266,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   walkSpeed: 5
-  crouchSpeed: 2.5
-  jumpForce: 5
   cameraTransform: {fileID: 1050447065677383591}
   mouseSensitivity: 2
-  crouchHeight: 0.5
-  normalHeight: 1
-  sunLightSim: {fileID: 0}
+  jumpForce: 2.5
+  inventario: []
+  dinero: 0
+  reputacion: 0
 --- !u!54 &3966901129394318132
 Rigidbody:
   m_ObjectHideFlags: 0

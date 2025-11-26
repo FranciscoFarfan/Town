@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 424314}
   - component: {fileID: 9585270}
+  - component: {fileID: -1010163895074880879}
   m_Layer: 0
   m_Name: Animal_Cow_White
   m_TagString: Untagged
@@ -87,6 +88,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-1010163895074880879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0adca30cb6eb9534881302cdd2115387, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimalBehaviour
+  radioMovimiento: 2
+  velocidad: 1
+  tiempoCambioMin: 3
+  tiempoCambioMax: 7
 --- !u!1 &102342
 GameObject:
   m_ObjectHideFlags: 0
