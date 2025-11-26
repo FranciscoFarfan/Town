@@ -238,22 +238,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other){
         if (other.CompareTag("Trigger"))
         {
             currentInteractable = other.GetComponent<IInteractuable>();
+            if (currentInteractable != null)
+            {
+                Debug.Log("Presiona E para " + currentInteractable.TextoInteraccion);
+            }
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
+    private void OnTriggerExit(Collider other){
         if (other.CompareTag("Trigger"))
         {
             if (currentInteractable != null)
+            {
                 currentInteractable = null;
+                Debug.Log("Saliste del área de interacción.");
+            }
         }
     }
+
 
     private void OnCollisionEnter(Collision collision)
     {
