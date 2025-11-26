@@ -9,6 +9,7 @@ TagManager:
   - Water
   - Trigger
   - Item
+  - EndGame
   layers:
   - Default
   - TransparentFX

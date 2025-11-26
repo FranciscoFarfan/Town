@@ -1,0 +1,8 @@
+Model Information:
+* title:	Finish Line
+* source:	https://sketchfab.com/3d-models/finish-line-7ec1d8194ddf46e6b398d336df0b5d7a
+* author:	hyd (https://sketchfab.com/hydroh)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

@@ -82,6 +82,7 @@
     <None Include="Assets\Sketchfab For Unity\Dependencies\Shaders\GLTFPackOccMetalRough.shader" />
     <None Include="Assets\Import\Glock_[Low_Poly]\license.txt" />
     <None Include="Assets\Course Library\Fonts\Baloo_Chettan\OFL.txt" />
+    <None Include="Assets\Import\Finish_Line\license.txt" />
     <None Include="Assets\Import\Various_Forest_Assets_Pack\license.txt" />
     <None Include="Assets\Import\Coniferous_Forest_Assets_Pack\license.txt" />
     <None Include="Assets\Sketchfab For Unity\Dependencies\Libraries\Newtonsoft.Json.dll" />
