@@ -1,0 +1,11 @@
+Model Information:
+* title:	Glock [Low Poly]
+* source:	https://sketchfab.com/3d-models/glock-low-poly-2267d4a1dd474af7b8172c7f7619136b
+* author:	Radint (https://sketchfab.com/radint20)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Glock [Low Poly]" (https://sketchfab.com/3d-models/glock-low-poly-2267d4a1dd474af7b8172c7f7619136b) by Radint (https://sketchfab.com/radint20) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
