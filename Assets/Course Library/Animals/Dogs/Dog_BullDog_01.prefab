@@ -6139,6 +6139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 436982}
   - component: {fileID: 9527350}
+  - component: {fileID: -4618978255030767669}
   m_Layer: 0
   m_Name: Dog_BullDog_01
   m_TagString: Untagged
@@ -6220,6 +6221,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-4618978255030767669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cb457dec6e8d9a4fada894527985c84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DogBehaviour
+  radioMovimiento: 0.5
+  velocidad: 1
+  tiempoCambioMin: 6
+  tiempoCambioMax: 15
 --- !u!1 &199364
 GameObject:
   m_ObjectHideFlags: 0

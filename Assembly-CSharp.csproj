@@ -62,6 +62,7 @@
     <Compile Include="Assets\Course Library\Triggers\Scripts\DoorTrigger.cs" />
     <Compile Include="Assets\Sketchfab For Unity\Scripts\SketchfabUI.cs" />
     <Compile Include="Assets\Course Library\_Source_Files\Materials\water\waterMovement.cs" />
+    <Compile Include="Assets\Course Library\Animals\Dogs\DogBehaviour.cs" />
     <Compile Include="Assets\Sketchfab For Unity\Scripts\AssetBrowser\SketchfabBrowserWindow.cs" />
     <Compile Include="Assets\Sketchfab For Unity\Scripts\Resizer.cs" />
     <Compile Include="Assets\Sketchfab For Unity\Scripts\SketchfabApi.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Assets\Sketchfab For Unity\Scripts\AssetBrowser\SketchfabModelWindow.cs" />
     <Compile Include="Assets\Sketchfab For Unity\Scripts\SketchfabImporter.cs" />
     <Compile Include="Assets\Mapa Global\Scripts globales\DiaNoche.cs" />
+    <Compile Include="Assets\Course Library\Animals\Farm\AnimalBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Sketchfab For Unity\Dependencies\Shaders\GLTFFlipTexture.shader" />
