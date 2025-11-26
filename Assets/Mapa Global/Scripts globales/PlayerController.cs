@@ -26,11 +26,15 @@ public class PlayerController : MonoBehaviour
     [Header("Inventario")]
     public List<PlayerItem> inventario = new List<PlayerItem>();
     public float dinero = 0f;
+    public int reputacion = 0;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
+        AddToInv("ManzanaVerde", 4); 
+        EarnMoney(50f);
+        AddReputation(10);
     }
 
     void Update()
@@ -39,11 +43,22 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleJump();
         HandleInteraction();
+        
+
     }
 
     // ---------------- INVENTARIO ----------------
-    public void AddToInv(string nombre, int cantidad)
-    {
+
+    void EjecutarAccionO(){
+        Debug.Log("Se presionó la tecla O, ejecutando acción...");
+        
+        Debug.Log(AddReputation(5));
+        Debug.Log(EarnMoney(50f));
+        Debug.Log(LoseReputation(2));
+        Debug.Log(PayMoney(20f));
+    }
+
+    public string AddToInv(string nombre, int cantidad){
         PlayerItem item = inventario.Find(i => i.nombre == nombre);
         if (item != null)
         {
@@ -53,17 +68,127 @@ public class PlayerController : MonoBehaviour
         {
             inventario.Add(new PlayerItem { nombre = nombre, cantidad = cantidad });
         }
+
+        return $"Recibiste {cantidad} {nombre}(s) en tu inventario.";
     }
 
-    public void SellFromInv(string nombre, int cantidad)
-    {
+    public string SellFromInv(string nombre, int cantidad){
         PlayerItem item = inventario.Find(i => i.nombre == nombre);
         ItemData baseItem = GameManager.Instance.baseDeDatos.Find(i => i.nombre == nombre);
 
         if (item != null && item.cantidad >= cantidad && baseItem != null)
         {
             item.cantidad -= cantidad;
-            dinero += baseItem.precio * cantidad;
+
+            // 🔹 Calcular factor de venta según rareza
+            float factor = 1f;
+            switch (baseItem.rareza)
+            {
+                case 1: // común
+                    factor = Random.Range(0.65f, 0.75f); // alrededor del 70%
+                    break;
+                case 2: // poco común
+                    factor = Random.Range(0.80f, 0.90f); // entre 80 y 90%
+                    break;
+                case 3: // raro
+                    factor = Random.Range(0.95f, 1.05f); // 100% con ligera variación
+                    break;
+            }
+
+            float precioVenta = baseItem.precio * factor;
+            float ganancia = precioVenta * cantidad;
+            dinero += ganancia;
+
+            return $"Vendiste {cantidad} {nombre}(s) por {ganancia:F1} monedas (rareza {baseItem.rareza}, factor {factor:P0}).";
+        }
+        else
+        {
+            return $"No tienes suficientes {nombre} para vender.";
+        }
+    }
+
+
+    public string BuyFromShop(string nombre, int cantidad){
+        ItemData baseItem = GameManager.Instance.baseDeDatos.Find(i => i.nombre == nombre);
+
+        if (baseItem != null)
+        {
+            float costo = baseItem.precio * cantidad;
+            if (dinero >= costo)
+            {
+                dinero -= costo;
+                AddToInv(nombre, cantidad);
+                return $"Compraste {cantidad} {nombre}(s) por {costo} monedas.";
+            }
+            else
+            {
+                return $"No tienes suficiente dinero para comprar {cantidad} {nombre}(s).";
+            }
+        }
+        else
+        {
+            return $"El objeto {nombre} no existe en la tienda.";
+        }
+    }
+
+    public string RemoveFromInv(string nombre, int cantidad){
+        PlayerItem item = inventario.Find(i => i.nombre == nombre);
+
+        if (item != null && item.cantidad >= cantidad)
+        {
+            item.cantidad -= cantidad;
+            return $"Se removieron {cantidad} {nombre}(s) de tu inventario.";
+        }
+        else
+        {
+            return $"No tienes suficientes {nombre} para remover.";
+        }
+    }
+
+    // ---------------- DINERO ----------------
+    public string PayMoney(float cantidad)
+    {
+        if (dinero >= cantidad)
+        {
+            dinero -= cantidad;
+            return $"Pagaste {cantidad} monedas. Dinero restante: {dinero:F1}.";
+        }
+        else
+        {
+            return $"No tienes suficiente dinero para pagar {cantidad}.";
+        }
+    }
+
+    public string EarnMoney(float cantidad)
+    {
+        dinero += cantidad;
+        return $"Recibiste {cantidad} monedas. Dinero total: {dinero:F1}.";
+    }
+
+    // ---------------- REPUTACIÓN ----------------
+    public string AddReputation(int cantidad)
+    {
+        reputacion += cantidad;
+        return $"Tu reputación aumentó en {cantidad}. Reputación actual: {reputacion}.";
+    }
+
+    public string LoseReputation(int cantidad)
+    {
+        reputacion -= cantidad;
+        if (reputacion < 0) reputacion = 0; // opcional: no permitir reputación negativa
+        return $"Perdiste {cantidad} de reputación. Reputación actual: {reputacion}.";
+    }
+
+
+
+
+    public void MostrarInventario(){
+        foreach (var item in inventario)
+        {
+            if (item.cantidad > 0) 
+            {
+                Debug.Log(item.nombre + " x" + item.cantidad);
+            }
         }
     }
 
@@ -95,6 +220,12 @@ public class PlayerController : MonoBehaviour
         if (currentInteractable != null && Input.GetKeyDown(KeyCode.E))
         {
             currentInteractable.Interaccion();
+        }
+        if (Input.GetKeyDown(KeyCode.O)){
+            EjecutarAccionO();
+        }
+        if (Input.GetKeyDown(KeyCode.I)){
+            MostrarInventario();
         }
     }
 
