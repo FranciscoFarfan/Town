@@ -12,7 +12,6 @@ public class Robar : MonoBehaviour, IInteractuable
     public GameObject panelRobar;
     public TextMeshProUGUI textoMensaje;
     
-    private static int ultimoDiaRobo = -1;
     private static bool misionAncianaCompletada = false;
     private static bool misionAncianaActiva = false;
     
@@ -95,7 +94,6 @@ public class Robar : MonoBehaviour, IInteractuable
 
     void ActualizarMensaje()
     {
-        GameManager gm = GameManager.Instance;
         string mensaje = "";
 
         if (esMisionInicial)
@@ -103,7 +101,7 @@ public class Robar : MonoBehaviour, IInteractuable
             // NPC que da la misión de robar a la anciana
             if (misionAncianaCompletada)
             {
-                mensaje = "Ya completaste ese trabajo.\n\nAhora puedes robar a cualquiera una vez al día.";
+                mensaje = "Ya completaste ese trabajo.\n\nAhora puedes robar a cualquiera cuando quieras.";
             }
             else if (misionAncianaActiva)
             {
@@ -136,10 +134,6 @@ public class Robar : MonoBehaviour, IInteractuable
             if (!misionAncianaCompletada)
             {
                 mensaje = "Primero debes completar tu primera misión de robo.";
-            }
-            else if (ultimoDiaRobo == gm.dia)
-            {
-                mensaje = "Ya robaste hoy.\n\nNo llames la atención.";
             }
             else
             {
@@ -221,13 +215,6 @@ public class Robar : MonoBehaviour, IInteractuable
                 return;
             }
 
-            if (ultimoDiaRobo == gm.dia)
-            {
-                Debug.Log("Ya robaste hoy.");
-                ActualizarMensaje();
-                return;
-            }
-
             // Seleccionar item aleatorio
             if (gm.baseDeDatos.Count == 0)
             {
@@ -243,9 +230,6 @@ public class Robar : MonoBehaviour, IInteractuable
 
             // Perder reputación
             string repMsg = player.LoseReputation(2);
-
-            // Actualizar último día de robo
-            ultimoDiaRobo = gm.dia;
 
             Debug.Log($"Robaste {itemRobado}.");
             Debug.Log(repMsg);
