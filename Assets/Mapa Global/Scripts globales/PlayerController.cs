@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using TMPro;
 
 [System.Serializable]
 public class PlayerItem
@@ -8,7 +8,6 @@ public class PlayerItem
     public string nombre;
     public int cantidad;
 }
-
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,6 +27,10 @@ public class PlayerController : MonoBehaviour
     public float dinero = 0f;
     public int reputacion = 0;
 
+    [Header("UI Interacción")]
+    public GameObject panelInteraccion;
+    public TextMeshProUGUI textoInteraccion;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -35,6 +38,9 @@ public class PlayerController : MonoBehaviour
         AddToInv("ManzanaVerde", 4); 
         EarnMoney(50f);
         AddReputation(10);
+
+        if (panelInteraccion != null)
+            panelInteraccion.SetActive(false);
     }
 
     void Update()
@@ -43,22 +49,19 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleJump();
         HandleInteraction();
-        
-
     }
 
-    // ---------------- INVENTARIO ----------------
-
-    void EjecutarAccionO(){
+    void EjecutarAccionO()
+    {
         Debug.Log("Se presionó la tecla O, ejecutando acción...");
-        
         Debug.Log(AddReputation(5));
         Debug.Log(EarnMoney(50f));
         Debug.Log(LoseReputation(2));
         Debug.Log(PayMoney(20f));
     }
 
-    public string AddToInv(string nombre, int cantidad){
+    public string AddToInv(string nombre, int cantidad)
+    {
         PlayerItem item = inventario.Find(i => i.nombre == nombre);
         if (item != null)
         {
@@ -68,11 +71,11 @@ public class PlayerController : MonoBehaviour
         {
             inventario.Add(new PlayerItem { nombre = nombre, cantidad = cantidad });
         }
-
         return $"Recibiste {cantidad} {nombre}(s) en tu inventario.";
     }
 
-    public string SellFromInv(string nombre, int cantidad){
+    public string SellFromInv(string nombre, int cantidad)
+    {
         PlayerItem item = inventario.Find(i => i.nombre == nombre);
         ItemData baseItem = GameManager.Instance.baseDeDatos.Find(i => i.nombre == nombre);
 
@@ -80,18 +83,17 @@ public class PlayerController : MonoBehaviour
         {
             item.cantidad -= cantidad;
 
-            // 🔹 Calcular factor de venta según rareza
             float factor = 1f;
             switch (baseItem.rareza)
             {
-                case 1: // común
-                    factor = Random.Range(0.65f, 0.75f); // alrededor del 70%
+                case 1:
+                    factor = Random.Range(0.65f, 0.75f);
                     break;
-                case 2: // poco común
-                    factor = Random.Range(0.80f, 0.90f); // entre 80 y 90%
+                case 2:
+                    factor = Random.Range(0.80f, 0.90f);
                     break;
-                case 3: // raro
-                    factor = Random.Range(0.95f, 1.05f); // 100% con ligera variación
+                case 3:
+                    factor = Random.Range(0.95f, 1.05f);
                     break;
             }
 
@@ -107,8 +109,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    public string BuyFromShop(string nombre, int cantidad){
+    public string BuyFromShop(string nombre, int cantidad)
+    {
         ItemData baseItem = GameManager.Instance.baseDeDatos.Find(i => i.nombre == nombre);
 
         if (baseItem != null)
@@ -131,7 +133,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public string RemoveFromInv(string nombre, int cantidad){
+    public string RemoveFromInv(string nombre, int cantidad)
+    {
         PlayerItem item = inventario.Find(i => i.nombre == nombre);
 
         if (item != null && item.cantidad >= cantidad)
@@ -145,7 +148,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ---------------- DINERO ----------------
     public string PayMoney(float cantidad)
     {
         if (dinero >= cantidad)
@@ -165,7 +167,6 @@ public class PlayerController : MonoBehaviour
         return $"Recibiste {cantidad} monedas. Dinero total: {dinero:F1}.";
     }
 
-    // ---------------- REPUTACIÓN ----------------
     public string AddReputation(int cantidad)
     {
         reputacion += cantidad;
@@ -175,14 +176,12 @@ public class PlayerController : MonoBehaviour
     public string LoseReputation(int cantidad)
     {
         reputacion -= cantidad;
-        if (reputacion < 0) reputacion = 0; // opcional: no permitir reputación negativa
+        if (reputacion < 0) reputacion = 0;
         return $"Perdiste {cantidad} de reputación. Reputación actual: {reputacion}.";
     }
 
-
-
-
-    public void MostrarInventario(){
+    public void MostrarInventario()
+    {
         foreach (var item in inventario)
         {
             if (item.cantidad > 0) 
@@ -192,7 +191,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ---------------- MOVIMIENTO ----------------
     void HandleMovement()
     {
         float moveX = Input.GetAxis("Horizontal");
@@ -200,7 +198,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
         Vector3 velocity = move * walkSpeed;
-        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z); // ⚠️ corregí "linearVelocity" → es "velocity"
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
     }
 
     void HandleMouseLook()
@@ -221,10 +219,12 @@ public class PlayerController : MonoBehaviour
         {
             currentInteractable.Interaccion();
         }
-        if (Input.GetKeyDown(KeyCode.O)){
+        if (Input.GetKeyDown(KeyCode.O))
+        {
             EjecutarAccionO();
         }
-        if (Input.GetKeyDown(KeyCode.I)){
+        if (Input.GetKeyDown(KeyCode.I))
+        {
             MostrarInventario();
         }
     }
@@ -238,28 +238,58 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other){
+    private void OnTriggerEnter(Collider other)
+    {
         if (other.CompareTag("Trigger"))
         {
             currentInteractable = other.GetComponent<IInteractuable>();
             if (currentInteractable != null)
             {
+                MostrarPanelInteraccion(currentInteractable.TextoInteraccion);
                 Debug.Log("Presiona E para " + currentInteractable.TextoInteraccion);
             }
         }
     }
 
-    private void OnTriggerExit(Collider other){
+    private void OnTriggerExit(Collider other)
+    {
         if (other.CompareTag("Trigger"))
         {
             if (currentInteractable != null)
             {
                 currentInteractable = null;
+                OcultarPanelInteraccion();
                 Debug.Log("Saliste del área de interacción.");
             }
         }
     }
 
+    void MostrarPanelInteraccion(string texto)
+    {
+        if (panelInteraccion != null)
+        {
+            panelInteraccion.SetActive(true);
+            
+            if (textoInteraccion != null)
+            {
+                textoInteraccion.text = $"[E] {texto}";
+            }
+        }
+    }
+
+    void OcultarPanelInteraccion()
+    {
+        if (panelInteraccion != null)
+        {
+            panelInteraccion.SetActive(false);
+        }
+    }
+
+    public void LimpiarInteractuable()
+    {
+        currentInteractable = null;
+        OcultarPanelInteraccion();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
