@@ -101,6 +101,9 @@ public class PlayerController : MonoBehaviour
             float ganancia = precioVenta * cantidad;
             dinero += ganancia;
 
+            // Notificar si vendió item de misión de entregas
+            Entregas.OnItemVendido(nombre);
+
             return $"Vendiste {cantidad} {nombre}(s) por {ganancia:F1} monedas (rareza {baseItem.rareza}, factor {factor:P0}).";
         }
         else
