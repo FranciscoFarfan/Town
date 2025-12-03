@@ -10,7 +10,10 @@ public class Confesarse : MonoBehaviour, IInteractuable
     public GameObject panelConfesion;
     public TextMeshProUGUI textoMensaje;
     
-    private int ultimoDiaConfesion = -1;
+    [Header("Animación")]
+    public Animator npcAnimator; // Animator del NPC (cura/sacerdote)
+    public string nombreAnimacionPersinar = "Persinar"; // Nombre del estado/trigger
+    
     private PlayerController player;
     private bool panelAbierto = false;
     
@@ -18,14 +21,16 @@ public class Confesarse : MonoBehaviour, IInteractuable
 
     void Start()
     {
-        // Ocultar panel al inicio
         if (panelConfesion != null)
             panelConfesion.SetActive(false);
+            
+        // Buscar el Animator automáticamente si no está asignado
+        if (npcAnimator == null)
+            npcAnimator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        // Controles con teclado cuando el panel está abierto
         if (panelAbierto)
         {
             if (Input.GetKeyDown(KeyCode.T))
@@ -51,7 +56,6 @@ public class Confesarse : MonoBehaviour, IInteractuable
             return;
         }
 
-        // Abrir panel y mostrar mensaje apropiado
         AbrirPanel();
         ActualizarMensaje();
     }
@@ -63,7 +67,6 @@ public class Confesarse : MonoBehaviour, IInteractuable
             panelConfesion.SetActive(true);
             panelAbierto = true;
             
-            // Desactivar controles del jugador
             if (player != null)
                 player.enabled = false;
         }
@@ -76,7 +79,6 @@ public class Confesarse : MonoBehaviour, IInteractuable
             panelConfesion.SetActive(false);
             panelAbierto = false;
             
-            // Reactivar controles del jugador
             if (player != null)
                 player.enabled = true;
         }
@@ -84,16 +86,9 @@ public class Confesarse : MonoBehaviour, IInteractuable
 
     void ActualizarMensaje()
     {
-        GameManager gm = GameManager.Instance;
         string mensaje = "";
 
-        // Verificar si ya se confesó hoy
-        if (ultimoDiaConfesion == gm.dia)
-        {
-            mensaje = "Ya te has confesado hoy.\n\nVuelve mañana si necesitas purificar tu alma nuevamente.";
-        }
-        // Verificar si tiene reputación negativa
-        else if (player.reputacion >= 0)
+        if (player.reputacion >= 0)
         {
             mensaje = $"Tu reputación es buena ({player.reputacion}).\n\nNo necesitas confesarte en este momento.";
         }
@@ -108,33 +103,43 @@ public class Confesarse : MonoBehaviour, IInteractuable
 
     void RealizarConfesion()
     {
-        GameManager gm = GameManager.Instance;
-
-        // Verificar si puede confesarse
-        if (ultimoDiaConfesion == gm.dia)
-        {
-            Debug.Log("Ya te has confesado hoy.");
-            ActualizarMensaje(); // Recargar el panel con el mensaje actualizado
-            return;
-        }
-
         if (player.reputacion >= 0)
         {
             Debug.Log("No necesitas confesarte.");
-            ActualizarMensaje(); // Recargar el panel con el mensaje actualizado
+            ActualizarMensaje();
             return;
         }
 
-        // Realizar la confesión
-        ultimoDiaConfesion = gm.dia;
         string resultado = player.AddReputation(reputacionGanada);
         
         Debug.Log("Te has confesado. " + resultado);
 
-        // Actualizar mensaje
         if (textoMensaje != null)
         {
             textoMensaje.text = $"Has confesado tus pecados.\n\n{resultado}\n\nQue la paz esté contigo.";
         }
+        
+        // Activar animación de persinar
+        ActivarAnimacionPersinar();
+    }
+    
+    void ActivarAnimacionPersinar()
+    {
+        if (npcAnimator == null)
+        {
+            Debug.LogWarning("No hay Animator asignado para el NPC.");
+            return;
+        }
+        
+        // Opción 1: Si usas un Trigger
+        npcAnimator.SetTrigger(nombreAnimacionPersinar);
+        
+        // Opción 2: Si usas un Bool (descomenta si es el caso)
+        // npcAnimator.SetBool(nombreAnimacionPersinar, true);
+        
+        // Opción 3: Si quieres reproducir directamente un estado (descomenta si es el caso)
+        // npcAnimator.Play(nombreAnimacionPersinar);
+        
+        Debug.Log($"Animación {nombreAnimacionPersinar} activada.");
     }
 }
