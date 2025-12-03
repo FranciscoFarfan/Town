@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour
     public int oro;
     public int reputacion;
 
+    [Header("Estado del jugador")]
+    public bool isInCar = false;
+    public bool isInBoat = false;
+
 
     [Header("Tiempo del juego")]
     public float hora = 8f; // hora inicial
@@ -171,6 +175,25 @@ public class GameManager : MonoBehaviour
     {
         oro += cantidad;
         Debug.Log($"[Oro] Nuevo oro: {oro}");
+    }
+
+    // 🔹 Métodos para controlar el estado del jugador en vehículos
+    public void SetInCar(bool estado)
+    {
+        isInCar = estado;
+        Debug.Log($"[Estado] Jugador {(estado ? "entró al" : "salió del")} carro.");
+    }
+
+    public void SetInBoat(bool estado)
+    {
+        isInBoat = estado;
+        Debug.Log($"[Estado] Jugador {(estado ? "entró al" : "salió del")} bote.");
+    }
+
+    // 🔹 Obtener estadísticas del jugador para determinar el final
+    public (int dinero, int reputacion, bool enCarro, bool enBote) GetStats()
+    {
+        return (oro, reputacion, isInCar, isInBoat);
     }
 
     // 🔹 Función para avanzar rápidamente el tiempo (solo si es después de las 8 PM)

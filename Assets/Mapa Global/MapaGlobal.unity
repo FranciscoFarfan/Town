@@ -57837,7 +57837,7 @@ MonoBehaviour:
   reputacionGanada: 4
   dineroGanado: 50
   cantidadBasuraTotal: 5
-  prefabBasura: {fileID: 0}
+  prefabBasura: {fileID: 3882611212030187457, guid: 56ecdde1cd1b42b4b8a98c418e28a727, type: 3}
   puntosSpawn:
   - {fileID: 1909040055}
   - {fileID: 697095139}
@@ -67623,6 +67623,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   oro: 0
   reputacion: 0
+  isInCar: 0
+  isInBoat: 0
   hora: 21
   dia: 1
   velocidadTiempo: 0.03
