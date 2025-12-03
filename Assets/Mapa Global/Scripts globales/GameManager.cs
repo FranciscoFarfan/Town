@@ -32,12 +32,41 @@ public class GameManager : MonoBehaviour
     public float velocidadRapida = 10f; // Velocidad durante el avance rápido
     private bool avanzandoTiempo = false;
 
+    [Header("Sonidos ambientales")]
+    public AudioSource townSound;
+    public AudioSource farmSounds;
+    public AudioSource peopleSounds;
+    public AudioSource forestSounds;
+    public AudioSource seaSounds;
+
+    [Header("Curvas de volumen (0-24 horas)")]
+    public AnimationCurve curvaVolumenDiurno = AnimationCurve.EaseInOut(0, 0, 24, 0); // Para Town, People, Farm
+    private float volumenMaximoDiurno = 1f;
+
     [Header("Base de datos de ítems")]
     public List<ItemData> baseDeDatos = new List<ItemData>();
 
     void Awake()
     {
         if (Instance == null) Instance = this;
+    }
+
+    void Start()
+    {
+        // Configurar curva de volumen por defecto si no está configurada
+        if (curvaVolumenDiurno.keys.Length <= 2)
+        {
+            curvaVolumenDiurno = new AnimationCurve(
+                new Keyframe(0f, 0f),      // 00:00 - Silencio
+                new Keyframe(6f, 0.2f),    // 06:00 - Empezando a despertar
+                new Keyframe(8f, 0.6f),    // 08:00 - Actividad matutina
+                new Keyframe(12f, 1f),     // 12:00 - Máxima actividad (mediodía)
+                new Keyframe(18f, 0.8f),   // 18:00 - Tarde activa
+                new Keyframe(20f, 0.4f),   // 20:00 - Atardeciendo
+                new Keyframe(22f, 0.1f),   // 22:00 - Noche tranquila
+                new Keyframe(24f, 0f)      // 24:00 - Silencio nocturno
+            );
+        }
     }
 
     void Update()
@@ -49,6 +78,27 @@ public class GameManager : MonoBehaviour
             hora = 0f;
             dia++;
         }
+
+        // Actualizar volúmenes de sonidos ambientales
+        ActualizarVolumenesSonidos();
+    }
+
+    // 🔹 Actualizar volúmenes de sonidos según la hora del día
+    void ActualizarVolumenesSonidos()
+    {
+        // Evaluar la curva en la hora actual (0-24)
+        float factorVolumen = curvaVolumenDiurno.Evaluate(hora) * volumenMaximoDiurno;
+
+        // Aplicar volumen a sonidos diurnos (Town, People, Farm)
+        if (townSound != null)
+            townSound.volume = factorVolumen;
+
+        if (peopleSounds != null)
+            peopleSounds.volume = factorVolumen;
+
+        if (farmSounds != null)
+            farmSounds.volume = factorVolumen;
+
     }
 
     // 🔹 Método para spawnear ítems en el mapa
