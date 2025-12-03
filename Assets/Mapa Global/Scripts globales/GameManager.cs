@@ -43,6 +43,12 @@ public class GameManager : MonoBehaviour
     public AnimationCurve curvaVolumenDiurno = AnimationCurve.EaseInOut(0, 0, 24, 0); // Para Town, People, Farm
     private float volumenMaximoDiurno = 1f;
 
+    [Header("Control de luces")]
+    public float horaEncenderLuces = 19f; // 7 PM
+    public float horaApagarLuces = 7f; // 7 AM
+    private Light[] lucesControladas;
+    private bool lucesEncendidas = false;
+
     [Header("Base de datos de ítems")]
     public List<ItemData> baseDeDatos = new List<ItemData>();
 
@@ -67,6 +73,20 @@ public class GameManager : MonoBehaviour
                 new Keyframe(24f, 0f)      // 24:00 - Silencio nocturno
             );
         }
+
+        // Buscar todas las luces con el tag "Luz"
+        GameObject[] objetosLuz = GameObject.FindGameObjectsWithTag("Luz");
+        lucesControladas = new Light[objetosLuz.Length];
+        
+        for (int i = 0; i < objetosLuz.Length; i++)
+        {
+            lucesControladas[i] = objetosLuz[i].GetComponent<Light>();
+        }
+
+        Debug.Log($"[Luces] Se encontraron {lucesControladas.Length} luces para controlar.");
+
+        // Establecer estado inicial de las luces según la hora actual
+        ActualizarEstadoLuces();
     }
 
     void Update()
@@ -81,6 +101,9 @@ public class GameManager : MonoBehaviour
 
         // Actualizar volúmenes de sonidos ambientales
         ActualizarVolumenesSonidos();
+
+        // Actualizar estado de las luces
+        ActualizarEstadoLuces();
     }
 
     // 🔹 Actualizar volúmenes de sonidos según la hora del día
@@ -99,6 +122,33 @@ public class GameManager : MonoBehaviour
         if (farmSounds != null)
             farmSounds.volume = factorVolumen;
 
+    }
+
+    // 🔹 Actualizar estado de las luces según la hora del día
+    void ActualizarEstadoLuces()
+    {
+        if (lucesControladas == null || lucesControladas.Length == 0)
+            return;
+
+        // Determinar si las luces deben estar encendidas
+        // Encender a las 19:00 (7 PM), apagar a las 7:00 (7 AM)
+        bool debenEstarEncendidas = hora >= horaEncenderLuces || hora < horaApagarLuces;
+
+        // Solo cambiar el estado si es diferente al actual (optimización)
+        if (debenEstarEncendidas != lucesEncendidas)
+        {
+            lucesEncendidas = debenEstarEncendidas;
+
+            foreach (Light luz in lucesControladas)
+            {
+                if (luz != null)
+                {
+                    luz.enabled = lucesEncendidas;
+                }
+            }
+
+            Debug.Log($"[Luces] {(lucesEncendidas ? "Encendidas" : "Apagadas")} a las {hora:F1} horas.");
+        }
     }
 
     // 🔹 Método para spawnear ítems en el mapa
