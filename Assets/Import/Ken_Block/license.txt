@@ -1,0 +1,11 @@
+Model Information:
+* title:	Ken Block
+* source:	https://sketchfab.com/3d-models/ken-block-0f42c49a39bb4bb293a69465c65600dc
+* author:	Wilbruh (https://sketchfab.com/mirz1911)
+
+Model License:
+* license type:	CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions can not be distributed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Ken Block" (https://sketchfab.com/3d-models/ken-block-0f42c49a39bb4bb293a69465c65600dc) by Wilbruh (https://sketchfab.com/mirz1911) licensed under CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
