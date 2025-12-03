@@ -11,7 +11,6 @@ public class Entregas : MonoBehaviour, IInteractuable
     public GameObject panelEntregas;
     public TextMeshProUGUI textoMensaje;
     
-    private static int ultimoDiaEntrega = -1;
     private static bool misionActiva = false;
     private static string itemAEntregar = "";
     private static Entregas npcDestino = null;
@@ -88,7 +87,6 @@ public class Entregas : MonoBehaviour, IInteractuable
 
     void ActualizarMensaje()
     {
-        GameManager gm = GameManager.Instance;
         string mensaje = "";
 
         if (esNPCInicial)
@@ -97,10 +95,6 @@ public class Entregas : MonoBehaviour, IInteractuable
             if (misionActiva)
             {
                 mensaje = $"Ya tienes una entrega activa.\n\nDebes entregar: {itemAEntregar}\n\nDestino: {npcDestino.gameObject.name}";
-            }
-            else if (ultimoDiaEntrega == gm.dia)
-            {
-                mensaje = "Ya hiciste una entrega hoy.\n\nVuelve mañana para más trabajo.";
             }
             else
             {
@@ -130,14 +124,6 @@ public class Entregas : MonoBehaviour, IInteractuable
 
         if (misionActiva)
         {
-            Debug.Log("Ya hay una misión activa.");
-            ActualizarMensaje();
-            return;
-        }
-
-        if (ultimoDiaEntrega == gm.dia)
-        {
-            Debug.Log("Ya hiciste una entrega hoy.");
             ActualizarMensaje();
             return;
         }
@@ -148,7 +134,6 @@ public class Entregas : MonoBehaviour, IInteractuable
             return;
         }
 
-        // Seleccionar item aleatorio
         if (gm.baseDeDatos.Count == 0)
         {
             Debug.LogWarning("No hay items en la base de datos.");
@@ -158,18 +143,14 @@ public class Entregas : MonoBehaviour, IInteractuable
         ItemData itemAleatorio = gm.baseDeDatos[Random.Range(0, gm.baseDeDatos.Count)];
         itemAEntregar = itemAleatorio.nombre;
 
-        // Seleccionar NPC destino aleatorio
         npcDestino = npcsPosiblesDestino[Random.Range(0, npcsPosiblesDestino.Length)];
         npcOrigen = this;
 
-        // Dar item al jugador
         player.AddToInv(itemAEntregar, 1);
 
-        // Activar misión
         misionActiva = true;
-        ultimoDiaEntrega = gm.dia;
 
-        Debug.Log($"Misión iniciada: Entrega {itemAEntregar} a {npcDestino.gameObject.name}");
+        Debug.Log($"Misión de entrega aceptada: Lleva {itemAEntregar} a {npcDestino.gameObject.name}");
 
         if (textoMensaje != null)
         {
@@ -190,6 +171,7 @@ public class Entregas : MonoBehaviour, IInteractuable
 
         // Verificar que tenga el item
         PlayerItem item = player.inventario.Find(i => i.nombre == itemAEntregar);
+        
         if (item == null || item.cantidad < 1)
         {
             if (textoMensaje != null)
