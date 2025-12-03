@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400000}
   - component: {fileID: 9500000}
+  - component: {fileID: 5011596982689554217}
   m_Layer: 0
   m_Name: SimpleFarmer_Woman_02_Brown 1
   m_TagString: Untagged
@@ -47,7 +48,7 @@ Animator:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: aaf0205bbf9d1a4458899575eed1c962, type: 3}
-  m_Controller: {fileID: 9100000, guid: 022cd8e9b1d113b41905bcb401343e62, type: 2}
+  m_Controller: {fileID: 9100000, guid: 1de385df2ff713a41adfcbbb63b8af91, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -59,6 +60,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5011596982689554217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a526e8a3f17b0a64081bdb5e145fb3cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LookAtPlayer
+  player: {fileID: 0}
+  detectionDistance: 5
+  lookSpeed: 3
+  minRandomLookTime: 2
+  maxRandomLookTime: 5
+  randomHorizontalRange: 0.8
+  randomVerticalRange: 0.5
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 0
