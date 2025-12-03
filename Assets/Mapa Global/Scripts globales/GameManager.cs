@@ -16,6 +16,10 @@ public class ItemData
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    [Header("Oro y Reputacion")]
+    public int oro;
+    public int reputacion;
+
 
     [Header("Tiempo del juego")]
     public float hora = 8f; // hora inicial
@@ -49,6 +53,18 @@ public class GameManager : MonoBehaviour
         {
             Instantiate(item.prefab, posicion, Quaternion.identity);
         }
+    }
+    
+    public void AumentarReputacion(int cantidad)
+    {
+        reputacion += cantidad;
+        Debug.Log($"[Reputación] Nueva reputación: {reputacion}");
+    }
+
+    public void AgregarOro(int cantidad)
+    {
+        oro += cantidad;
+        Debug.Log($"[Oro] Nuevo oro: {oro}");
     }
 
 }
