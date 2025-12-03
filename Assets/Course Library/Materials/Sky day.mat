@@ -66,11 +66,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-<<<<<<< HEAD
-    - _Exposure: 0.7726138
-=======
-    - _Exposure: 0.7724897
->>>>>>> 59ecaf37955f6b4d7e8fb70eafee533a9a25fef2
+    - _Exposure: 0.7578703
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -91,10 +87,6 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-<<<<<<< HEAD
-    - _Tint: {r: 0.9034073, g: 0.96517557, b: 0.9767631, a: 0.11713138}
-=======
-    - _Tint: {r: 0.9034786, g: 0.96522623, b: 0.9768007, a: 0.11778422}
->>>>>>> 59ecaf37955f6b4d7e8fb70eafee533a9a25fef2
+    - _Tint: {r: 0.90592664, g: 0.96696407, b: 0.9780885, a: 0.14018106}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
