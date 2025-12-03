@@ -59,11 +59,7 @@ public class PlayerController : MonoBehaviour
 
     void EjecutarAccionO()
     {
-        Debug.Log("Se presionó la tecla O, ejecutando acción...");
-        Debug.Log(AddReputation(5));
-        Debug.Log(EarnMoney(50f));
-        Debug.Log(LoseReputation(2));
-        Debug.Log(PayMoney(20f));
+        
     }
 
     public string AddToInv(string nombre, int cantidad)

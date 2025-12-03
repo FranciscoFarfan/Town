@@ -67625,7 +67625,7 @@ MonoBehaviour:
   reputacion: 0
   isInCar: 0
   isInBoat: 0
-  hora: 21
+  hora: 12
   dia: 1
   velocidadTiempo: 0.03
   camaraJugador: {fileID: 1638170118}
