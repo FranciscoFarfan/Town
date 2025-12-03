@@ -26,6 +26,12 @@ public class GameManager : MonoBehaviour
     public int dia = 1;
     public float velocidadTiempo = 1f; // multiplicador de avance
 
+    [Header("Avance rápido de tiempo")]
+    public Camera camaraJugador; // Asignar en el inspector
+    public Vector3 posicionCinematica = new Vector3(0, 10, 0); // Posición para la cinemática
+    public float velocidadRapida = 10f; // Velocidad durante el avance rápido
+    private bool avanzandoTiempo = false;
+
     [Header("Base de datos de ítems")]
     public List<ItemData> baseDeDatos = new List<ItemData>();
 
@@ -65,6 +71,85 @@ public class GameManager : MonoBehaviour
     {
         oro += cantidad;
         Debug.Log($"[Oro] Nuevo oro: {oro}");
+    }
+
+    // 🔹 Función para avanzar rápidamente el tiempo (solo si es después de las 8 PM)
+    public void IniciarAvanceRapido()
+    {
+        if (hora >= 20f && !avanzandoTiempo)
+        {
+            StartCoroutine(AvanzarTiempoRapido());
+        }
+        else if (hora < 20f)
+        {
+            Debug.Log("[Avance Rápido] Solo se puede usar después de las 8 PM (20:00)");
+        }
+        else
+        {
+            Debug.Log("[Avance Rápido] Ya se está avanzando el tiempo");
+        }
+    }
+
+    private System.Collections.IEnumerator AvanzarTiempoRapido()
+    {
+        avanzandoTiempo = true;
+
+        // Obtener referencia al PlayerController
+        PlayerController playerController = FindFirstObjectByType<PlayerController>();
+        
+        // Desactivar el control del jugador
+        if (playerController != null)
+        {
+            playerController.controleActivo = false;
+        }
+
+        // Guardar la posición y rotación original de la cámara
+        Transform padreOriginal = camaraJugador.transform.parent;
+        Vector3 posicionOriginal = camaraJugador.transform.localPosition;
+        Quaternion rotacionOriginal = camaraJugador.transform.localRotation;
+
+        // Desemparentar la cámara del jugador
+        camaraJugador.transform.SetParent(null);
+
+        // Mover la cámara a la posición cinemática
+        camaraJugador.transform.position = posicionCinematica;
+        // Hacer que la cámara mire hacia la ciudad
+        camaraJugador.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+
+        // Esperar un frame para asegurar que la rotación se aplique
+        yield return null;
+
+        Debug.Log("[Avance Rápido] Iniciando avance rápido del tiempo...");
+
+        // Guardar la velocidad original
+        float velocidadOriginal = velocidadTiempo;
+
+        // Aumentar la velocidad del tiempo
+        velocidadTiempo = velocidadRapida;
+
+        // Esperar hasta que sea de día (por ejemplo, las 6 AM)
+        while (hora >= 20f || hora < 7f)
+        {
+            yield return null; // Esperar un frame
+        }
+
+        // Restaurar la velocidad del tiempo
+        velocidadTiempo = velocidadOriginal;
+
+        Debug.Log("[Avance Rápido] Avance rápido completado. Es de día.");
+
+        // Regresar la cámara a su posición original
+        camaraJugador.transform.SetParent(padreOriginal);
+        camaraJugador.transform.localPosition = posicionOriginal;
+        camaraJugador.transform.localRotation = rotacionOriginal;
+
+        // Reactivar el control del jugador
+        if (playerController != null)
+        {
+            playerController.controleActivo = true;
+        }
+
+        avanzandoTiempo = false;
     }
 
 }

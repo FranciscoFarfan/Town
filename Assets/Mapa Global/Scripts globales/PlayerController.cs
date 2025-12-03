@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = true;
     private IInteractuable currentInteractable;
 
+    [Header("Control")]
+    public bool controleActivo = true; // Permite desactivar el control durante cinemáticas
+
     [Header("Inventario")]
     public List<PlayerItem> inventario = new List<PlayerItem>();
     public float dinero = 0f;
@@ -45,9 +48,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        HandleMouseLook();
-        HandleMovement();
-        HandleJump();
+        if (controleActivo)
+        {
+            HandleMouseLook();
+            HandleMovement();
+            HandleJump();
+        }
         HandleInteraction();
     }
 
