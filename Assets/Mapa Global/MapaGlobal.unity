@@ -25184,8 +25184,6 @@ Transform:
   - {fileID: 1233271556808414388}
   - {fileID: 1247864695}
   - {fileID: 455601306}
-  - {fileID: 1701382565}
-  - {fileID: 1939783441}
   - {fileID: 1580143043}
   - {fileID: 957889691}
   - {fileID: 977040000}
@@ -29690,7 +29688,7 @@ MonoBehaviour:
   textoMensaje: {fileID: 349074766}
   npcAnimator: {fileID: 0}
   nombreAnimacionReaccion: Reaccion
-  nombreParametroMuerte: 
+  nombreParametroMuerte: Muerto
   tiempoAntesDeDestruir: 3
 --- !u!1 &1201287938
 GameObject:
@@ -54456,7 +54454,7 @@ MonoBehaviour:
   textoMensaje: {fileID: 349074766}
   npcAnimator: {fileID: 0}
   nombreAnimacionReaccion: Reaccion
-  nombreParametroMuerte: 
+  nombreParametroMuerte: Muerto
   tiempoAntesDeDestruir: 3
 --- !u!1 &1665377422
 GameObject:
@@ -56019,7 +56017,6 @@ Transform:
   - {fileID: 955219055}
   - {fileID: 195978237}
   - {fileID: 882741278}
-  - {fileID: 1596838133}
   - {fileID: 1885372611}
   - {fileID: 956560389}
   - {fileID: 311266147}
@@ -56119,11 +56116,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699152551}
   m_Mesh: {fileID: 4300000, guid: d53838e74e2115d4e8fc469f47f0408f, type: 2}
---- !u!4 &1701382565 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3808483554315788678, guid: 5a52cec4d6a3bce419057cb7ff6a7b21, type: 3}
-  m_PrefabInstance: {fileID: 1495935115}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1707573208
 GameObject:
   m_ObjectHideFlags: 0
@@ -59438,11 +59430,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1939584416}
   m_Mesh: {fileID: 4300000, guid: 512faf97c6227c44b924695759a7b3cd, type: 2}
---- !u!4 &1939783441 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3808483554315788678, guid: 5a52cec4d6a3bce419057cb7ff6a7b21, type: 3}
-  m_PrefabInstance: {fileID: 1640497278}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1954420448
 GameObject:
   m_ObjectHideFlags: 0
@@ -67944,7 +67931,7 @@ MonoBehaviour:
   hora: 12
   dia: 1
   velocidadTiempo: 0.03
-  camaraJugador: {fileID: 1638170118}
+  camaraJugador: {fileID: 0}
   posicionCinematica: {x: 0, y: 21, z: 40}
   velocidadRapida: 1
   townSound: {fileID: 1539950616}
@@ -124456,13 +124443,12 @@ SceneRoots:
   - {fileID: 1696600411}
   - {fileID: 1089234973}
   - {fileID: 1788266898}
-  - {fileID: 267637613}
-  - {fileID: 531222774}
-  - {fileID: 568512372}
-  - {fileID: 614376757}
-  - {fileID: 1539950617}
   - {fileID: 1198109550}
   - {fileID: 1660565302}
   - {fileID: 1862304194}
   - {fileID: 1389722250}
   - {fileID: 2096807025}
+  - {fileID: 1011443961}
+  - {fileID: 1405257764}
+  - {fileID: 642888123}
+  - {fileID: 860215880}
