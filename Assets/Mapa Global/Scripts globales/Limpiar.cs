@@ -6,21 +6,24 @@ public class Limpiar : MonoBehaviour, IInteractuable
     [Header("Configuración de Misión")]
     public int reputacionGanada = 4;
     public float dineroGanado = 50f;
-    public int cantidadBasuraTotal = 5; // Cantidad de basura a recoger
+    public int cantidadBasuraTotal = 5;
     
     [Header("Spawn de Basura")]
     public GameObject prefabBasura;
-    public Transform[] puntosSpawn; // Puntos donde aparecerá la basura
+    public Transform[] puntosSpawn;
     
     [Header("UI")]
     public GameObject panelLimpiar;
     public TextMeshProUGUI textoMensaje;
     
+    [Header("Animación")]
+    public Animator npcAnimator; // Animator del NPC
+    public string nombreAnimacionSalute = "Salute"; // Nombre del estado/trigger
+    
     [HideInInspector]
     public bool misionActiva = false;
     
     private int basuraRecogida = 0;
-    private int ultimoDiaLimpieza = -1;
     private PlayerController player;
     private bool panelAbierto = false;
     
@@ -30,6 +33,10 @@ public class Limpiar : MonoBehaviour, IInteractuable
     {
         if (panelLimpiar != null)
             panelLimpiar.SetActive(false);
+            
+        // Buscar el Animator automáticamente si no está asignado
+        if (npcAnimator == null)
+            npcAnimator = GetComponent<Animator>();
     }
 
     void Update()
@@ -89,20 +96,15 @@ public class Limpiar : MonoBehaviour, IInteractuable
 
     void ActualizarMensaje()
     {
-        GameManager gm = GameManager.Instance;
         string mensaje = "";
 
         if (misionActiva)
         {
-            mensaje = $"Misión en progreso\n\nBasura recogida: {basuraRecogida}/{cantidadBasuraTotal}\n\nRecoge toda la basura de la zona para completar la misión.";
-        }
-        else if (ultimoDiaLimpieza == gm.dia)
-        {
-            mensaje = "Ya has limpiado hoy.\n\nVuelve mañana para una nueva tarea.";
+            mensaje = $"Misión en progreso\nBasura recogida: {basuraRecogida}/{cantidadBasuraTotal}\nRecoge toda la basura de la zona para completar la misión.";
         }
         else
         {
-            mensaje = $"Necesito que limpies la zona.\n\nRecoge {cantidadBasuraTotal} objetos de basura.\n\nRecompensa:\nReputación: +{reputacionGanada}\nDinero: ${dineroGanado}";
+            mensaje = $"Necesito que limpies la zona.   Recoge {cantidadBasuraTotal} objetos de basura.\nRecompensa:\nReputación: +{reputacionGanada}\tDinero: ${dineroGanado}";
         }
 
         if (textoMensaje != null)
@@ -111,8 +113,6 @@ public class Limpiar : MonoBehaviour, IInteractuable
 
     void IniciarMision()
     {
-        GameManager gm = GameManager.Instance;
-
         if (misionActiva)
         {
             Debug.Log("La misión ya está activa.");
@@ -120,29 +120,21 @@ public class Limpiar : MonoBehaviour, IInteractuable
             return;
         }
 
-        if (ultimoDiaLimpieza == gm.dia)
-        {
-            Debug.Log("Ya has limpiado hoy.");
-            ActualizarMensaje();
-            return;
-        }
-
-        // Iniciar misión
         misionActiva = true;
         basuraRecogida = 0;
-        ultimoDiaLimpieza = gm.dia;
         
-        // Spawnear basura
         SpawnearBasura();
         
         Debug.Log($"Misión iniciada: Recoge {cantidadBasuraTotal} objetos de basura.");
         
         if (textoMensaje != null)
         {
-            textoMensaje.text = $"¡Misión aceptada!\n\nBasura recogida: {basuraRecogida}/{cantidadBasuraTotal}\n\nBusca y recoge la basura marcada.";
+            textoMensaje.text = $"¡Misión aceptada!\nBasura recogida: {basuraRecogida}/{cantidadBasuraTotal}\nBusca y recoge la basura marcada.";
         }
         
-        // Cerrar panel después de aceptar
+        // Activar animación de saludo
+        ActivarAnimacionSalute();
+        
         Invoke("CerrarPanel", 2f);
     }
 
@@ -160,7 +152,6 @@ public class Limpiar : MonoBehaviour, IInteractuable
             return;
         }
 
-        // Spawnear basura en puntos aleatorios
         for (int i = 0; i < cantidadBasuraTotal; i++)
         {
             if (i < puntosSpawn.Length && puntosSpawn[i] != null)
@@ -177,7 +168,6 @@ public class Limpiar : MonoBehaviour, IInteractuable
         basuraRecogida++;
         Debug.Log($"Basura recogida: {basuraRecogida}/{cantidadBasuraTotal}");
 
-        // Verificar si se completó la misión
         if (basuraRecogida >= cantidadBasuraTotal)
         {
             CompletarMision();
@@ -188,7 +178,6 @@ public class Limpiar : MonoBehaviour, IInteractuable
     {
         misionActiva = false;
 
-        // Dar recompensas
         string reputacionMsg = player.AddReputation(reputacionGanada);
         string dineroMsg = player.EarnMoney(dineroGanado);
 
@@ -196,13 +185,35 @@ public class Limpiar : MonoBehaviour, IInteractuable
         Debug.Log(reputacionMsg);
         Debug.Log(dineroMsg);
 
-        // Mostrar panel de completado
         AbrirPanel();
         if (textoMensaje != null)
         {
             textoMensaje.text = $"¡Misión completada!\n\n{reputacionMsg}\n{dineroMsg}\n\n¡Buen trabajo!";
         }
         
+        // Activar animación de saludo al completar
+        ActivarAnimacionSalute();
+        
         Invoke("CerrarPanel", 3f);
+    }
+    
+    void ActivarAnimacionSalute()
+    {
+        if (npcAnimator == null)
+        {
+            Debug.LogWarning("No hay Animator asignado para el NPC.");
+            return;
+        }
+        
+        // Opción 1: Si usas un Trigger
+        npcAnimator.SetTrigger(nombreAnimacionSalute);
+        
+        // Opción 2: Si usas un Bool (descomenta si es el caso)
+        // npcAnimator.SetBool(nombreAnimacionSalute, true);
+        
+        // Opción 3: Si quieres reproducir directamente un estado (descomenta si es el caso)
+        // npcAnimator.Play(nombreAnimacionSalute);
+        
+        Debug.Log($"Animación {nombreAnimacionSalute} activada.");
     }
 }
