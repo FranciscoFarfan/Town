@@ -58,7 +58,7 @@ Material:
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 150, y: 150}
-        m_Offset: {x: 3.676527, y: 3.676527}
+        m_Offset: {x: 2.731405, y: 2.731405}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
