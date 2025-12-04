@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class VehicleController : MonoBehaviour, IInteractuable
+public class BoatController : MonoBehaviour, IInteractuable
 {
-    [Header("Configuración del Vehículo")]
-    public float speed = 15f;
-    public float turnSpeed = 50f;
+    [Header("Configuración del Barco")]
+    public float speed = 10f;
+    public float turnSpeed = 25f;
     public Transform seatPoint; // Punto donde se "sienta" el jugador (o se oculta)
     public Transform exitPoint; // Punto donde aparece el jugador al salir
     public Transform cameraMountPoint; // Punto donde se colocará la cámara del jugador
@@ -53,7 +53,7 @@ public class VehicleController : MonoBehaviour, IInteractuable
         // Actualizar GameManager
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.SetInCar(true);
+            GameManager.Instance.SetInBoat(true);
         }
 
         // Desactivar control del jugador y ocultarlo
@@ -105,7 +105,7 @@ public class VehicleController : MonoBehaviour, IInteractuable
         // Actualizar GameManager
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.SetInCar(false);
+            GameManager.Instance.SetInBoat(false);
         }
 
         // Restaurar cámara
@@ -138,8 +138,8 @@ public class VehicleController : MonoBehaviour, IInteractuable
 
     void HandleMovement()
     {
-        float horizontalInput = -Input.GetAxis("Horizontal");
-        float verticalInput = -Input.GetAxis("Vertical");
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
 
         // Mover hacia adelante/atrás
         transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);

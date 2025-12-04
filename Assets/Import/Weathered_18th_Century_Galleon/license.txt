@@ -1,0 +1,11 @@
+Model Information:
+* title:	Weathered 18th Century Galleon
+* source:	https://sketchfab.com/3d-models/weathered-18th-century-galleon-b097e67c207540628828ebb55afce914
+* author:	GalaxyAbundant (https://sketchfab.com/Piscesol)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Weathered 18th Century Galleon" (https://sketchfab.com/3d-models/weathered-18th-century-galleon-b097e67c207540628828ebb55afce914) by GalaxyAbundant (https://sketchfab.com/Piscesol) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
