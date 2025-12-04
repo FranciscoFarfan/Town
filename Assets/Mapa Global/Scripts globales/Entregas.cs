@@ -94,11 +94,11 @@ public class Entregas : MonoBehaviour, IInteractuable
             // NPC que da el paquete
             if (misionActiva)
             {
-                mensaje = $"Ya tienes una entrega activa.\n\nDebes entregar: {itemAEntregar}\n\nDestino: {npcDestino.gameObject.name}";
+                mensaje = $"Ya tienes una entrega activa.\tDebes entregar: {itemAEntregar}\tDestino: {npcDestino.gameObject.name}";
             }
             else
             {
-                mensaje = "Necesito que entregues un paquete.\n\nRecompensa:\nReputación: +2\nDinero: 10% del valor del objeto\n\nCuidado: Si lo vendes perderás reputación.";
+                mensaje = "Necesito que entregues un paquete.\tRecompensa: +2 Reputación, 10% del valor\n\nCuidado: Si lo vendes perderás reputación.";
             }
         }
         else
@@ -106,7 +106,7 @@ public class Entregas : MonoBehaviour, IInteractuable
             // NPC que recibe el paquete
             if (misionActiva && npcDestino == this)
             {
-                mensaje = $"¿Traes mi paquete?\n\nDebes entregar: {itemAEntregar}";
+                mensaje = $"¿Traes mi paquete?\t\tDebes entregar: {itemAEntregar}";
             }
             else
             {
@@ -154,7 +154,7 @@ public class Entregas : MonoBehaviour, IInteractuable
 
         if (textoMensaje != null)
         {
-            textoMensaje.text = $"Misión aceptada!\n\nEntrega: {itemAEntregar}\nDestino: {npcDestino.gameObject.name}\n\nNo lo vendas o perderás reputación!";
+            textoMensaje.text = $"Misión aceptada!\tEntrega: {itemAEntregar}\tDestino: {npcDestino.gameObject.name}\n\nNo lo vendas o perderás reputación!";
         }
 
         Invoke("CerrarPanel", 3f);
@@ -176,7 +176,7 @@ public class Entregas : MonoBehaviour, IInteractuable
         {
             if (textoMensaje != null)
             {
-                textoMensaje.text = $"¡No tienes el paquete!\n\n¿Lo vendiste?\n\nPerdiste reputación por robar.";
+                textoMensaje.text = $"¡No tienes el paquete!\t¿Lo vendiste?\tPerdiste 3 de reputación.";
             }
             
             // Penalización por vender el paquete
@@ -207,7 +207,7 @@ public class Entregas : MonoBehaviour, IInteractuable
 
         if (textoMensaje != null)
         {
-            textoMensaje.text = $"¡Entrega completada!\n\n{repMsg}\n{dineroMsg}\n\n¡Gracias!";
+            textoMensaje.text = $"¡Entrega completada!\t{repMsg}\t{dineroMsg}\t¡Gracias!";
         }
 
         // Resetear misión
