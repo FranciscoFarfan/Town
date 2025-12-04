@@ -79,13 +79,11 @@ public class PescaDiaria : MonoBehaviour, IInteractuable
         
         if (pezData != null)
         {
-            // Spawnear el pez cerca del jugador
-            Vector3 posicionSpawn = player.transform.position + player.transform.forward * 2f;
-            gm.SpawnItem(nombrePez, posicionSpawn);
+            
             
             if (textoMensaje != null)
             {
-                textoMensaje.text = $"¡Has pescado un {nombrePez}!\n\nRecógelo del suelo.";
+                textoMensaje.text = $"¡Has pescado un {nombrePez}.";
             }
             
             Debug.Log($"Pescaste un {nombrePez}");
