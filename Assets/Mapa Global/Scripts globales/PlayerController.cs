@@ -121,6 +121,54 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public string SellLastItemAdded()
+    {
+        if (inventario.Count == 0)
+        {
+            return "No tienes objetos en el inventario para vender.";
+        }
+
+        // Obtener el último item del inventario
+        PlayerItem ultimoItem = inventario[inventario.Count - 1];
+        ItemData baseItem = GameManager.Instance.baseDeDatos.Find(i => i.nombre == ultimoItem.nombre);
+
+        if (baseItem != null)
+        {
+            string nombreItem = ultimoItem.nombre;
+            int cantidadVendida = ultimoItem.cantidad;
+
+            // Remover el item del inventario
+            inventario.RemoveAt(inventario.Count - 1);
+
+            float factor = 1f;
+            switch (baseItem.rareza)
+            {
+                case 1:
+                    factor = Random.Range(0.65f, 0.75f);
+                    break;
+                case 2:
+                    factor = Random.Range(0.80f, 0.90f);
+                    break;
+                case 3:
+                    factor = Random.Range(0.95f, 1.05f);
+                    break;
+            }
+
+            float precioVenta = baseItem.precio * factor;
+            float ganancia = precioVenta * cantidadVendida;
+            dinero += ganancia;
+
+            // Notificar si vendió item de misión de entregas
+            Entregas.OnItemVendido(nombreItem);
+
+            ActualizarUIStats();
+            return $"Vendiste {cantidadVendida} {nombreItem}(s) por {ganancia:F1} monedas (rareza {baseItem.rareza}, factor {factor:P0}).";
+        }
+        else
+        {
+            return "Error: No se encontró la información del item en la base de datos.";
+        }
+    }
     public string BuyFromShop(string nombre, int cantidad)
     {
         ItemData baseItem = GameManager.Instance.baseDeDatos.Find(i => i.nombre == nombre);
@@ -199,22 +247,28 @@ public class PlayerController : MonoBehaviour
 
     void ActualizarUIStats()
     {
+        textoStats.text = "";
         if (textoStats != null)
         {
-            textoStats.text = $"Dinero: ${dinero:F0}\t\tReputación: {reputacion}";
+            if(Input.GetKey(KeyCode.I))
+            {
+                textoStats.text += $"Dinero: ${dinero:F0}\t\tReputación: {reputacion} \n";
+                foreach (var item in inventario)
+                {
+                    if (item.cantidad > 0) 
+                    {
+                        textoStats.text += item.nombre + " x" + item.cantidad + "\n";
+                    }
+                }
+                
+            }else{
+                textoStats.text = $"Dinero: ${dinero:F0}\t\tReputación: {reputacion} \n Presiona I para ver el inventario";
+            }
+            
         }
     }
 
-    public void MostrarInventario()
-    {
-        foreach (var item in inventario)
-        {
-            if (item.cantidad > 0) 
-            {
-                Debug.Log(item.nombre + " x" + item.cantidad);
-            }
-        }
-    }
+ 
 
     void HandleMovement()
     {
@@ -247,10 +301,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.O))
         {
             EjecutarAccionO();
-        }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            MostrarInventario();
         }
     }
 

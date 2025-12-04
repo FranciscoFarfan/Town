@@ -14,7 +14,7 @@ public class PescaDiaria : MonoBehaviour, IInteractuable
     private int ultimoDiaPesca = -1;
     private PlayerController player;
     private bool pescando = false;
-    
+
     public string TextoInteraccion => "Pescar";
 
     void Start()
@@ -87,6 +87,9 @@ public class PescaDiaria : MonoBehaviour, IInteractuable
             }
             
             Debug.Log($"Pescaste un {nombrePez}");
+            PlayerController player = FindObjectOfType<PlayerController>();
+            textoMensaje.text = player.AddToInv(nombrePez, 1);
+        
         }
         else
         {
