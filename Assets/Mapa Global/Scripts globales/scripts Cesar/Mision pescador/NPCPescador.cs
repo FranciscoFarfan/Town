@@ -63,7 +63,7 @@ public class NPCPescador : MonoBehaviour
         zona.SetActive(false);
         cajaCana.SetActive(true);
 
-        dialogoUI.text = "Pescador: Agarra la caña de la caja.\nPresiona E para cerrar.";
+        dialogoUI.text = "Pescador: Agarra la caña de la caja.\nPresiona E en la caja.";
 
         esperar = 2;
     }
