@@ -34,6 +34,9 @@ public class PlayerController : MonoBehaviour
     public GameObject panelInteraccion;
     public TextMeshProUGUI textoInteraccion;
 
+    [Header("UI Stats")]
+    public TextMeshProUGUI textoStats; // Muestra dinero y reputación
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -44,6 +47,8 @@ public class PlayerController : MonoBehaviour
 
         if (panelInteraccion != null)
             panelInteraccion.SetActive(false);
+
+        ActualizarUIStats();
     }
 
     void Update()
@@ -55,6 +60,7 @@ public class PlayerController : MonoBehaviour
             HandleJump();
         }
         HandleInteraction();
+        ActualizarUIStats(); // Actualizar constantemente
     }
 
     void EjecutarAccionO()
@@ -106,6 +112,7 @@ public class PlayerController : MonoBehaviour
             // Notificar si vendió item de misión de entregas
             Entregas.OnItemVendido(nombre);
 
+            ActualizarUIStats();
             return $"Vendiste {cantidad} {nombre}(s) por {ganancia:F1} monedas (rareza {baseItem.rareza}, factor {factor:P0}).";
         }
         else
@@ -125,6 +132,7 @@ public class PlayerController : MonoBehaviour
             {
                 dinero -= costo;
                 AddToInv(nombre, cantidad);
+                ActualizarUIStats();
                 return $"Compraste {cantidad} {nombre}(s) por {costo} monedas.";
             }
             else
@@ -158,6 +166,7 @@ public class PlayerController : MonoBehaviour
         if (dinero >= cantidad)
         {
             dinero -= cantidad;
+            ActualizarUIStats();
             return $"Pagaste {cantidad} monedas. Dinero restante: {dinero:F1}.";
         }
         else
@@ -169,12 +178,14 @@ public class PlayerController : MonoBehaviour
     public string EarnMoney(float cantidad)
     {
         dinero += cantidad;
+        ActualizarUIStats();
         return $"Recibiste {cantidad} monedas. Dinero total: {dinero:F1}.";
     }
 
     public string AddReputation(int cantidad)
     {
         reputacion += cantidad;
+        ActualizarUIStats();
         return $"Tu reputación aumentó en {cantidad}. Reputación actual: {reputacion}.";
     }
 
@@ -182,7 +193,16 @@ public class PlayerController : MonoBehaviour
     {
         reputacion -= cantidad;
         if (reputacion < 0) reputacion = 0;
+        ActualizarUIStats();
         return $"Perdiste {cantidad} de reputación. Reputación actual: {reputacion}.";
+    }
+
+    void ActualizarUIStats()
+    {
+        if (textoStats != null)
+        {
+            textoStats.text = $"Dinero: ${dinero:F0}\t\tReputación: {reputacion}";
+        }
     }
 
     public void MostrarInventario()
