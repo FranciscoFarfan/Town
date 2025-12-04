@@ -58,7 +58,7 @@ public class VehicleController : MonoBehaviour, IInteractuable
 
         // Desactivar control del jugador y ocultarlo
         player.controleActivo = false;
-        player.GetComponent<Collider>().enabled = false; // Desactivar colisiones del jugador
+    
         player.GetComponent<Rigidbody>().isKinematic = true; // Desactivar física del jugador
         
         // Mover jugador al asiento
@@ -130,7 +130,6 @@ public class VehicleController : MonoBehaviour, IInteractuable
         }
 
         player.controleActivo = true;
-        player.GetComponent<Collider>().enabled = true;
         player.GetComponent<Rigidbody>().isKinematic = false;
 
         player = null;
