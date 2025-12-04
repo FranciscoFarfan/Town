@@ -6,16 +6,23 @@ public class Confesarse : MonoBehaviour, IInteractuable
     [Header("Configuración de Confesión")]
     public int reputacionGanada = 1;
     
+    [Header("Límite Diario")]
+    public bool usarLimiteDiario = true;
+    public int confesionesMaxPorDia = 1;
+    
     [Header("UI")]
     public GameObject panelConfesion;
     public TextMeshProUGUI textoMensaje;
     
     [Header("Animación")]
-    public Animator npcAnimator; // Animator del NPC (cura/sacerdote)
-    public string nombreAnimacionPersinar = "Persinar"; // Nombre del estado/trigger
+    public Animator npcAnimator;
+    public string nombreAnimacionPersinar = "Persinar";
     
     private PlayerController player;
     private bool panelAbierto = false;
+    
+    private int ultimoDiaConfesion = -1;
+    private int confesionesHoy = 0;
     
     public string TextoInteraccion => "Confesarse";
 
@@ -24,13 +31,17 @@ public class Confesarse : MonoBehaviour, IInteractuable
         if (panelConfesion != null)
             panelConfesion.SetActive(false);
             
-        // Buscar el Animator automáticamente si no está asignado
         if (npcAnimator == null)
             npcAnimator = GetComponent<Animator>();
     }
 
     void Update()
     {
+        if (usarLimiteDiario)
+        {
+            VerificarNuevoDia();
+        }
+        
         if (panelAbierto)
         {
             if (Input.GetKeyDown(KeyCode.T))
@@ -42,6 +53,21 @@ public class Confesarse : MonoBehaviour, IInteractuable
             {
                 CerrarPanel();
             }
+        }
+    }
+
+    void VerificarNuevoDia()
+    {
+        GameManager gm = GameManager.Instance;
+        if (gm == null) return;
+        
+        int diaActual = gm.dia;
+        
+        if (diaActual != ultimoDiaConfesion)
+        {
+            confesionesHoy = 0;
+            ultimoDiaConfesion = diaActual;
+            Debug.Log($"[Confesarse] Nuevo día detectado. Confesiones disponibles: {confesionesMaxPorDia}");
         }
     }
 
@@ -87,14 +113,30 @@ public class Confesarse : MonoBehaviour, IInteractuable
     void ActualizarMensaje()
     {
         string mensaje = "";
+        GameManager gm = GameManager.Instance;
 
-        if (player.reputacion >= 0)
+        if (usarLimiteDiario && confesionesHoy >= confesionesMaxPorDia)
+        {
+            int horasRestantes = Mathf.CeilToInt(24f - gm.hora);
+            mensaje = $"Ya te has confesado hoy.\n\nConfesiones hoy: {confesionesHoy}/{confesionesMaxPorDia}\n\nVuelve en ~{horasRestantes} hora(s).\nDía actual: {gm.dia}";
+        }
+        else if (player.reputacion >= 0)
         {
             mensaje = $"Tu reputación es buena ({player.reputacion}).\n\nNo necesitas confesarte en este momento.";
+            
+            if (usarLimiteDiario)
+            {
+                mensaje += $"\n\nConfesiones hoy: {confesionesHoy}/{confesionesMaxPorDia}";
+            }
         }
         else
         {
             mensaje = $"Tu reputación actual es: {player.reputacion}\n\n¿Deseas confesarte?\n\nReputación: +{reputacionGanada}";
+            
+            if (usarLimiteDiario)
+            {
+                mensaje += $"\n\nConfesiones disponibles:\n{confesionesMaxPorDia - confesionesHoy}/{confesionesMaxPorDia}";
+            }
         }
 
         if (textoMensaje != null)
@@ -103,6 +145,15 @@ public class Confesarse : MonoBehaviour, IInteractuable
 
     void RealizarConfesion()
     {
+        GameManager gm = GameManager.Instance;
+        
+        if (usarLimiteDiario && confesionesHoy >= confesionesMaxPorDia)
+        {
+            Debug.Log("Ya alcanzaste el límite de confesiones por hoy.");
+            ActualizarMensaje();
+            return;
+        }
+        
         if (player.reputacion >= 0)
         {
             Debug.Log("No necesitas confesarte.");
@@ -112,14 +163,34 @@ public class Confesarse : MonoBehaviour, IInteractuable
 
         string resultado = player.AddReputation(reputacionGanada);
         
+        if (usarLimiteDiario)
+        {
+            confesionesHoy++;
+            Debug.Log($"[Confesarse] Confesiones realizadas hoy: {confesionesHoy}/{confesionesMaxPorDia}");
+        }
+        
         Debug.Log("Te has confesado. " + resultado);
 
         if (textoMensaje != null)
         {
-            textoMensaje.text = $"Has confesado tus pecados.\n\n{resultado}\n\nQue la paz esté contigo.";
+            string mensajeConfesion = $"Has confesado tus pecados.\n\n{resultado}\n\nQue la paz esté contigo.";
+            
+            if (usarLimiteDiario)
+            {
+                int restantes = confesionesMaxPorDia - confesionesHoy;
+                if (restantes > 0)
+                {
+                    mensajeConfesion += $"\n\nConfesiones restantes hoy: {restantes}";
+                }
+                else
+                {
+                    mensajeConfesion += "\n\n(No puedes confesarte más hoy)";
+                }
+            }
+            
+            textoMensaje.text = mensajeConfesion;
         }
         
-        // Activar animación de persinar
         ActivarAnimacionPersinar();
     }
     
@@ -131,15 +202,16 @@ public class Confesarse : MonoBehaviour, IInteractuable
             return;
         }
         
-        // Opción 1: Si usas un Trigger
         npcAnimator.SetTrigger(nombreAnimacionPersinar);
         
-        // Opción 2: Si usas un Bool (descomenta si es el caso)
-        // npcAnimator.SetBool(nombreAnimacionPersinar, true);
-        
-        // Opción 3: Si quieres reproducir directamente un estado (descomenta si es el caso)
-        // npcAnimator.Play(nombreAnimacionPersinar);
-        
         Debug.Log($"Animación {nombreAnimacionPersinar} activada.");
+    }
+    
+    public string ObtenerEstadoConfesiones()
+    {
+        if (!usarLimiteDiario)
+            return "Sin límite diario";
+            
+        return $"Confesiones: {confesionesHoy}/{confesionesMaxPorDia} | Día: {ultimoDiaConfesion}";
     }
 }
