@@ -7,20 +7,23 @@ public class VehicleController : MonoBehaviour, IInteractuable
     public float turnSpeed = 50f;
     public Transform seatPoint; // Punto donde se "sienta" el jugador (o se oculta)
     public Transform exitPoint; // Punto donde aparece el jugador al salir
-    public GameObject vehicleCamera; // Cámara del vehículo (opcional, si tiene una propia)
+    public Transform cameraMountPoint; // Punto donde se colocará la cámara del jugador
 
     [Header("Referencias")]
     private PlayerController player;
     private bool isDriving = false;
+
+    // Variables para restaurar la cámara
+    private Transform originalCameraParent;
+    private Vector3 originalCameraPosition;
+    private Quaternion originalCameraRotation;
 
     // Implementación de IInteractuable
     public string TextoInteraccion => "Conducir";
 
     void Start()
     {
-        // Asegurarse de que la cámara del vehículo esté desactivada al inicio
-        if (vehicleCamera != null)
-            vehicleCamera.SetActive(false);
+        
     }
 
     void Update()
@@ -58,7 +61,7 @@ public class VehicleController : MonoBehaviour, IInteractuable
         player.GetComponent<Collider>().enabled = false; // Desactivar colisiones del jugador
         player.GetComponent<Rigidbody>().isKinematic = true; // Desactivar física del jugador
         
-        // Mover jugador al asiento (o hacerlo hijo del coche para que se mueva con él)
+        // Mover jugador al asiento
         player.transform.SetParent(transform);
         if (seatPoint != null)
         {
@@ -67,23 +70,21 @@ public class VehicleController : MonoBehaviour, IInteractuable
         }
         else
         {
-            player.transform.localPosition = Vector3.zero; // Fallback
+            player.transform.localPosition = Vector3.zero;
         }
         
-        // Ocultar visualmente al jugador (opcional, si el coche es cerrado)
-        // player.gameObject.SetActive(false); // Cuidado: si desactivas el objeto, los scripts no corren. Mejor desactivar el render o moverlo.
-        // En este caso, lo mantendremos activo pero "dentro" y sin control.
-        
-        // Cambiar cámaras
-        if (vehicleCamera != null)
+        // Lógica de Cámara: Reparentar la cámara del jugador al vehículo
+        if (player.cameraTransform != null && cameraMountPoint != null)
         {
-            vehicleCamera.SetActive(true);
-            player.cameraTransform.gameObject.SetActive(false); // Desactivar cámara del jugador
-        }
-        else
-        {
-            // Si no hay cámara de vehículo, podríamos mover la cámara del jugador
-            // Pero por ahora asumimos que se asignará una cámara en el inspector
+            // Guardar estado original
+            originalCameraParent = player.cameraTransform.parent;
+            originalCameraPosition = player.cameraTransform.localPosition;
+            originalCameraRotation = player.cameraTransform.localRotation;
+
+            // Mover cámara al punto de montaje del vehículo
+            player.cameraTransform.SetParent(cameraMountPoint);
+            player.cameraTransform.localPosition = Vector3.zero;
+            player.cameraTransform.localRotation = Quaternion.identity;
         }
 
         player.LimpiarInteractuable(); // Limpiar UI
@@ -107,6 +108,14 @@ public class VehicleController : MonoBehaviour, IInteractuable
             GameManager.Instance.SetInCar(false);
         }
 
+        // Restaurar cámara
+        if (player.cameraTransform != null && originalCameraParent != null)
+        {
+            player.cameraTransform.SetParent(originalCameraParent);
+            player.cameraTransform.localPosition = originalCameraPosition;
+            player.cameraTransform.localRotation = originalCameraRotation;
+        }
+
         // Restaurar jugador
         player.transform.SetParent(null); // Desemparentar
         
@@ -124,20 +133,13 @@ public class VehicleController : MonoBehaviour, IInteractuable
         player.GetComponent<Collider>().enabled = true;
         player.GetComponent<Rigidbody>().isKinematic = false;
 
-        // Restaurar cámaras
-        if (vehicleCamera != null)
-        {
-            vehicleCamera.SetActive(false);
-            player.cameraTransform.gameObject.SetActive(true);
-        }
-
         player = null;
     }
 
     void HandleMovement()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        float horizontalInput = -Input.GetAxis("Horizontal");
+        float verticalInput = -Input.GetAxis("Vertical");
 
         // Mover hacia adelante/atrás
         transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);
