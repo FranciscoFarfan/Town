@@ -65,7 +65,8 @@ public class PlayerController : MonoBehaviour
 
     void EjecutarAccionO()
     {
-        
+        FinalManager finalManager = FindObjectOfType<FinalManager>();
+        finalManager.ReproducirFinal();
     }
 
     public string AddToInv(string nombre, int cantidad)

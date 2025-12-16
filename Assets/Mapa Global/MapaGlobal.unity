@@ -71369,7 +71369,7 @@ MonoBehaviour:
   isInBoat: 0
   hora: 12
   dia: 1
-  velocidadTiempo: 0.03
+  velocidadTiempo: 0.06
   camaraJugador: {fileID: 0}
   posicionCinematica: {x: 0, y: 21, z: 40}
   velocidadRapida: 1
