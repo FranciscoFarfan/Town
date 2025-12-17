@@ -1,8 +1,24 @@
 # Escape del pueblo
 
+Escape del Pueblo es un videojuego 3D desarrollado en Unity donde el jugador vive en una comunidad rural y busca reunir los recursos necesarios para escapar de una vida que no le satisface. A través de actividades como pesca, repartición, comercio e incluso decisiones morales como pedir limosna o robar, el jugador aprende a generar dinero y mejorar su reputación. El objetivo final es salir del mapa, y según las condiciones en las que lo logre—ya sea caminando, en un carro viejo o con riqueza y reputación—obtendrá uno de varios finales que reflejan las consecuencias de su camino.
 
-Escape del Pueblo es un videojuego 3D desarrollado en Unity donde el jugador vive en una comunidad rural y busca reunir los recursos necesarios para escapar de una vida que no le satisface. A través de actividades como pesca, agricultura, repartición, comercio e incluso decisiones morales como pedir limosna o robar, el jugador aprende a generar dinero, mejorar su reputación y contratar personas que trabajen por él. El objetivo final es salir del mapa, y según las condiciones en las que lo logre—ya sea caminando, en un carro viejo o con riqueza y reputación—obtendrá uno de varios finales que reflejan las consecuencias de su camino.
+# Caracteristicas
 
+## Mapa 3D
+<img width="888" height="448" alt="Captura de pantalla 2025-12-16 175112" src="https://github.com/user-attachments/assets/79bfedae-f0c6-499d-a8c3-c1ff7dfebe61" />
+
+## NPC con conversasiones y misiones
+<img width="884" height="457" alt="Captura de pantalla 2025-12-16 175130" src="https://github.com/user-attachments/assets/76bb61ae-7458-475b-aa7b-881db7c8e1fe" />
+
+## Multiples finales
+<img width="893" height="504" alt="Captura de pantalla 2025-12-16 175218" src="https://github.com/user-attachments/assets/f239b440-e1ce-47da-910d-df1af1b36628" />
+
+## Ken y su auto
+![Grabación 2025-12-16 175346](https://github.com/user-attachments/assets/0b20ed2e-f92c-4603-9166-6ee05521bb7c)
+
+## Trailer del juego
+
+https/youtu.be/bBdckYx1qtc?si=xCkh9LsVWJ2TpKbR
 
 ## Contributors
 - <img src="https://github.com/FranciscoFarfan.png" width="20" height="20" >[FranciscoFarfan](https://github.com/FranciscoFarfan) 
