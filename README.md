@@ -18,7 +18,7 @@ Escape del Pueblo es un videojuego 3D desarrollado en Unity donde el jugador viv
 
 ## Trailer del juego
 
-https/youtu.be/bBdckYx1qtc?si=xCkh9LsVWJ2TpKbR
+[Trailer farfantown.mp4](https://lefarfancloud.website/index.php/s/DcooZzzydD4Rnpr)
 
 ## Contributors
 - <img src="https://github.com/FranciscoFarfan.png" width="20" height="20" >[FranciscoFarfan](https://github.com/FranciscoFarfan) 
